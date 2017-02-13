@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-public class Movie implements Serializable{
+public class MovieUI implements Serializable{
 	
 	private Long movieId;
 	
@@ -38,7 +38,7 @@ public class Movie implements Serializable{
 	
 	private String countries;
 	
-	private String genreString;
+	private int[] genre;
 	
     private String imdbId;
 	
@@ -49,17 +49,10 @@ public class Movie implements Serializable{
 	
 	private com.userfront.domain.ImdbRating imdbRating;
 	
-	private Set<Genre> genre;
+	//private Set<Genre> genre;
 	
 	
 
-	public Set<Genre> getGenre() {
-		return genre;
-	}
-
-	public void setGenre(Set<Genre> genre) {
-		this.genre = genre;
-	}
 
 	public Long getMovieId() {
 		return movieId;
@@ -198,13 +191,14 @@ public class Movie implements Serializable{
 		this.countries = countries;
 	}
 
-	
-	public String getGenreString() {
-		return genreString;
+
+
+	public int[] getGenre() {
+		return genre;
 	}
 
-	public void setGenreString(String genreString) {
-		this.genreString = genreString;
+	public void setGenre(int[] genre) {
+		this.genre = genre;
 	}
 
 	public String getImdbId() {

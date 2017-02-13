@@ -1,5 +1,7 @@
 package com.userfront.dao.impl;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +13,7 @@ import com.userfront.dao.UserDao;
 import com.userfront.domain.User;
 
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 	
 	  @Autowired

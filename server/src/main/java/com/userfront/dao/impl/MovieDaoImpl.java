@@ -1,5 +1,6 @@
 package com.userfront.dao.impl;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,6 +29,9 @@ import com.userfront.domain.Movie;
 
 import com.userfront.domain.User;
 import com.userfront.domain.UserMovie;
+import com.userfront.domain.UserMovieId;
+import com.userfront.model.RatingsAndComments;
+import com.userfront.model.UserMovieRating;
 
 @Repository
 public class MovieDaoImpl implements MovieDao {
@@ -34,6 +39,7 @@ public class MovieDaoImpl implements MovieDao {
 	@Autowired
     private SessionFactory sessionFactory;
 
+	public static Logger LOGGER = Logger.getLogger(MovieDaoImpl.class);
 
 	@Override
 	public List<com.userfront.model.Movie> getAllMoviesAndSeries() {
@@ -76,6 +82,7 @@ public class MovieDaoImpl implements MovieDao {
 	public com.userfront.model.Movie findByMovieId(Long Id) {
 		Session session = sessionFactory.getCurrentSession();
 		Movie movie = (Movie) session.get(Movie.class, Id);
+		StringBuilder genreString = new StringBuilder();
 		com.userfront.model.Movie movieUI = new com.userfront.model.Movie();
     	try {
 			BeanUtils.copyProperties(movieUI, movie);
@@ -92,6 +99,7 @@ public class MovieDaoImpl implements MovieDao {
     			
     			//BeanUtils.copyProperties(genreUI,genre, new String[]{"movies"} );
     			 genreUI.setGenre(genre.getGenre());
+    			 genreString.append(genre.getGenre()+",");
     			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -99,6 +107,10 @@ public class MovieDaoImpl implements MovieDao {
     		genreSet.add(genreUI);
     	}
     	movieUI.setGenre(genreSet);
+    	movieUI.setGenreString(genreString.toString());
+    	movieUI.setImdbId(movie.getImdbRating().getImdbId());
+    	movieUI.setImdbVotes(movie.getImdbRating().getImdbVotes());
+    	movieUI.setImdbRatingDouble(movie.getImdbRating().getImdbRating());
         session.flush();
         
         return movieUI;
@@ -107,10 +119,13 @@ public class MovieDaoImpl implements MovieDao {
 	@Override
 	public Movie UpdateMovie(Long id,Movie movie) {
 		Session session = sessionFactory.getCurrentSession();
-        session.merge(movie);
-        Movie updatedMovie = (Movie) session.get(Movie.class, id);
+        session.update(movie);
         session.flush();
+        Movie updatedMovie = (Movie) session.get(Movie.class, id);
+      
         
+        session.clear();
+
         return updatedMovie;
 	}
 
@@ -118,9 +133,13 @@ public class MovieDaoImpl implements MovieDao {
 	public void deleteMovie(Long id) {
 		Session session = sessionFactory.getCurrentSession();	
         Movie movie = (Movie) session.get(Movie.class, id);
+      
+        movie.getGenres().clear();
         session.delete(movie);
         session.flush();
-		
+       
+        session.clear();
+
 	}
 
 	@Override
@@ -128,6 +147,7 @@ public class MovieDaoImpl implements MovieDao {
 		 Session session = sessionFactory.getCurrentSession();
 		 session.save(movie);
 		 session.flush();
+		 session.clear();
 		 return movie;
 	}
 
@@ -244,15 +264,59 @@ public class MovieDaoImpl implements MovieDao {
         session.flush();
 		return genreUIList;
 	}
+	
+	
+	@Override
+	public List<com.userfront.model.Movie> filterByGenre2(String id) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria cr = session.createCriteria(Genre.class);
+		cr.add(Restrictions.eq("genre",id));
+	    List<Genre> genres = cr.list();
+	    List<com.userfront.model.Movie> movieList=null;
+       // List<com.userfront.model.Genre> genreUIList = new ArrayList<com.userfront.model.Genre>();
+        for(Genre genre: genres)
+        {
+        	com.userfront.model.Genre genreUI = new com.userfront.model.Genre();
+        	movieList = new ArrayList<com.userfront.model.Movie>();
+        	for(Movie movie : genre.getMovies())
+        	{
+        		com.userfront.model.Movie movieUI = new com.userfront.model.Movie();
+        		try {
+					BeanUtils.copyProperties(movieUI, movie);
+				} catch (IllegalAccessException e) {
+					
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					
+					e.printStackTrace();
+				}
+        		movieList.add(movieUI);
+        	}
+        	//genreUI.setMovies(movieSet);
+        	//genreUIList.add(genreUI);
+        }
+        session.flush();
+		return movieList;
+	}
 
 	@Override
-	public List<UserMovie> getMovieRatingsAndComments(Long id) {
+	public List<RatingsAndComments> getMovieRatingsAndComments(Long id) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(UserMovie.class);
 		cr.add(Restrictions.eq("primaryKey.movie.movieId",id));
 		List<UserMovie> userMovies = cr.list();
+		
+		List<RatingsAndComments> ratingsAndCommentsList = new ArrayList<RatingsAndComments>();
+		for(UserMovie userMovie : userMovies )
+		{
+			RatingsAndComments ratingsAndComments = new RatingsAndComments();
+			ratingsAndComments.setUsername(userMovie.getPrimaryKey().getUser().getFirstName());
+			ratingsAndComments.setComment(userMovie.getComment());
+			ratingsAndComments.setRating(userMovie.getRating());
+			ratingsAndCommentsList.add(ratingsAndComments);
+		}
 		session.flush();
-		return  userMovies;
+		return  ratingsAndCommentsList;
 	}
 
 	@Override
@@ -350,6 +414,7 @@ public class MovieDaoImpl implements MovieDao {
 	public Double getMovieAverageRating(Long id) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria cr = session.createCriteria(UserMovie.class);
+		LOGGER.info("Getting movie Average Rating for Id : "+id);
 		cr.add(Restrictions.eq("primaryKey.movie.movieId",id));
 		ProjectionList projList = Projections.projectionList();
 		projList.add(Projections.avg("rating"));
@@ -358,5 +423,48 @@ public class MovieDaoImpl implements MovieDao {
 		return (Double) cr.uniqueResult();
 	
 	}
+
+	@Override
+	public UserMovieRating rateTheMovie(UserMovieRating userMovieRating) {
+		 Session session = sessionFactory.getCurrentSession();
+		 UserMovie userMovie = new UserMovie();
+		 Movie movie = new Movie();
+		 User user = new User();
+		 UserMovieId userMovieId = new UserMovieId();
+		 user.setUserId(userMovieRating.getUserId());
+		 movie.setMovieId(userMovieRating.getMovieId());
+		 userMovieId.setUser(user);
+		 userMovieId.setMovie(movie);
+		 
+		 userMovie.setPrimaryKey(userMovieId);
+		 userMovie.setMovie(movie);
+		 userMovie.setRating(userMovieRating.getRating());
+		 userMovie.setComment(userMovieRating.getComment());
+		 userMovie.setUser(user);
+		 
+		 session.merge(userMovie);
+		 session.flush();
+		 return userMovieRating;
+	}
+
+	@Override
+	public HashMap<Long, String> getGenreList() {
+		Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Genre");
+        List<Genre> genres= query.list();
+      
+        HashMap<Long,String> map = new HashMap<Long,String>();
+        for(Genre genre : genres)
+        {
+        	map.put(new Long(genre.getId()), genre.getGenre());
+        }
+        session.flush();
+      
+        session.clear();
+        
+		return map;
+	}
+
+
 
 }

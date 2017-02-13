@@ -30,6 +30,11 @@ public class UserMovieId implements Serializable{
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
+
+	@Override
+	public String toString() {
+		return "UserMovieId [user=" + user + ", movie=" + movie + "]";
+	}
 	
 	
 }

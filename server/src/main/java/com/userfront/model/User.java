@@ -15,6 +15,8 @@ public class User implements Serializable {
 	
 	private String firstName;
 	
+	private String salt;
+	
 	private boolean enabled=true;
 	
    
@@ -78,6 +80,23 @@ public class User implements Serializable {
 
 	public void setUserMovies(Set<UserMovie> userMovies) {
 		this.userMovies = userMovies;
+	}
+
+	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
 	}
 
 	@Override

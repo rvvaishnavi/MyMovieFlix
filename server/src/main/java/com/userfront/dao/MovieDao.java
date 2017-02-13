@@ -1,5 +1,6 @@
 package com.userfront.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
@@ -7,6 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 import com.userfront.domain.Genre;
 import com.userfront.domain.Movie;
 import com.userfront.domain.UserMovie;
+import com.userfront.model.RatingsAndComments;
+import com.userfront.model.UserMovieRating;
 
 
 
@@ -35,7 +38,7 @@ public interface MovieDao {
 
 	List<com.userfront.model.Genre> filterByGenre(String id);
 
-	List<UserMovie> getMovieRatingsAndComments(Long id);
+	List<RatingsAndComments> getMovieRatingsAndComments(Long id);
 
 	List<Movie> filterByType(String id);
 
@@ -48,4 +51,10 @@ public interface MovieDao {
 	List<Movie> sortMoviesBy();
 
 	Double getMovieAverageRating(Long id);
+
+	List<com.userfront.model.Movie> filterByGenre2(String id);
+
+	UserMovieRating rateTheMovie(UserMovieRating userMovieRating);
+
+	HashMap<Long, String> getGenreList();
 }

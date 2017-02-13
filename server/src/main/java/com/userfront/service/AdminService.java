@@ -1,6 +1,7 @@
 package com.userfront.service;
 
 import com.userfront.domain.Movie;
+import com.userfront.model.MovieUI;
 
 public interface AdminService {
     
@@ -8,5 +9,7 @@ public interface AdminService {
 
 	void deleteMovie(Long id);
 
-	Movie addMovie(Movie movie);
+	Movie addMovie(MovieUI movie);
+
+	Movie updateTheMovie(MovieUI movie);
 }

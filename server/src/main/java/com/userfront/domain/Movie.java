@@ -7,15 +7,21 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -57,13 +63,18 @@ public class Movie implements Serializable{
 	
 	private String countries;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
+	@JoinColumn(name="imdbId")
 	private ImdbRating imdbRating;
 	
-
 	
-	@ManyToMany( mappedBy = "movies",cascade=CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnore
+	@ManyToMany( fetch = FetchType.LAZY ,cascade={CascadeType.ALL})
+	@JoinTable( 
+		name = "movie_genre", 
+		joinColumns = {@JoinColumn(name="movie_id",updatable=false)}, 
+		inverseJoinColumns = {@JoinColumn(name="genre_id",updatable=false)}  
+	)
+	@JsonIgnore
 	private Set<Genre> genres = new HashSet<Genre>();
 	
 

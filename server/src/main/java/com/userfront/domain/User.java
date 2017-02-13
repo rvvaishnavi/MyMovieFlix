@@ -1,6 +1,7 @@
 package com.userfront.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,10 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class User implements Serializable {
+public class User implements UserDetails,Serializable {
     
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +33,11 @@ public class User implements Serializable {
 	
 	private String firstName;
 	
+	private String salt;
+	
 	private boolean enabled=true;
+	
+	
 	
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
@@ -97,10 +105,57 @@ public class User implements Serializable {
 		this.userMovies = userMovies;
 	}
 
+	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
 				+ firstName + ", enabled=" + enabled + ", roles=" + userRoles + ", userMovies=" + userMovies + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<Authority> authoritySet = new HashSet<>();
+		if(userRoles != null) {
+			for (UserRole uauth : userRoles) {
+				Authority authority = new Authority();
+				authority.setAuthorityName(uauth.getRole().getRole().toUpperCase());
+			}
+		}
+		return authoritySet;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
 	}
     
     

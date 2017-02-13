@@ -62,7 +62,7 @@ public class UserMovie {
 	}
 	@Override
 	public String toString() {
-		return "UserMovie [primaryKey=" + primaryKey + ", rating=" + rating + ", comment=" + comment + "]";
+		return "UserMovie [primaryKey=" + primaryKey.toString() + ", rating=" + rating + ", comment=" + comment + "]";
 	}
     
     

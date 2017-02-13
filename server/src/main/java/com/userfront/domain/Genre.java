@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,13 +26,10 @@ public class Genre implements Serializable {
 		
 		private String genre;
 	
-		@ManyToMany( fetch = FetchType.LAZY )
-		@JoinTable( 
-			name = "movie_genre", 
-			joinColumns = {@JoinColumn(name="genre_id")}, 
-			inverseJoinColumns = {@JoinColumn(name="movie_id")}  
-		)
-		@JsonIgnore
+	
+		
+		@ManyToMany( mappedBy = "genres",fetch = FetchType.LAZY)
+	    @JsonIgnore
 		private Set<Movie> movies = new HashSet<Movie>();
 
 		public Long getId() {

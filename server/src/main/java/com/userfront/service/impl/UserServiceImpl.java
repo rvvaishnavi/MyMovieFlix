@@ -1,13 +1,18 @@
 package com.userfront.service.impl;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +26,12 @@ import com.userfront.domain.UserMovie;
 import com.userfront.domain.UserRole;
 import com.userfront.exception.BadRequestException;
 import com.userfront.model.Genre;
-
+import com.userfront.model.RatingsAndComments;
+import com.userfront.model.UserMovieRating;
 import com.userfront.service.UserService;
+import com.userfront.util.DecryptPassword;
+import com.userfront.util.EncryptPassword;
+import com.userfront.util.GenerateRandomKey;
 
 
 
@@ -53,6 +62,40 @@ public class UserServiceImpl implements UserService  {
             userRoles.add(new UserRole(user, roleDao.findByRole("ROLE_USER")));
             
             user.getRoles().addAll(userRoles);
+            
+            KeyGenerator keyGen;
+            String key;
+			try {
+				keyGen = KeyGenerator.getInstance(GenerateRandomKey.AES);
+				keyGen.init(128);
+		        SecretKey sk = keyGen.generateKey();
+		        key = GenerateRandomKey.byteArrayToHexString(sk.getEncoded());
+		        System.out.println("key:" + key);
+		        user.setSalt(key);
+		        
+		        byte[] bytekey = EncryptPassword.hexStringToByteArray(key);
+		        SecretKeySpec sks = new SecretKeySpec(bytekey, EncryptPassword.AES);
+		        Cipher cipher;
+			
+				cipher = Cipher.getInstance(EncryptPassword.AES);
+				cipher.init(Cipher.ENCRYPT_MODE, sks, cipher.getParameters());
+			    byte[] encrypted = cipher.doFinal(user.getPassword().getBytes());
+			    String encryptedpwd = EncryptPassword.byteArrayToHexString(encrypted);
+			    
+			    System.out.println(encryptedpwd);
+		        user.setPassword(encryptedpwd);
+		            
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+           
+			
+			 
             
             localUser=  userDao.createUser(user);
             
@@ -102,7 +145,7 @@ public class UserServiceImpl implements UserService  {
 	}
 
 	@Override
-	public List<UserMovie> getMovieRatingsAndComments(Long id) {
+	public List<RatingsAndComments> getMovieRatingsAndComments(Long id) {
 		
 		return movieDao.getMovieRatingsAndComments(id);
 	}
@@ -123,6 +166,7 @@ public class UserServiceImpl implements UserService  {
 		List<Movie> movies= movieDao.filterByYear(id);
 		if(movies==null || movies.isEmpty())
 		throw new BadRequestException("no movies found");
+	   // return null;		
 		else
 		return movies;
 		
@@ -158,6 +202,64 @@ public class UserServiceImpl implements UserService  {
 			throw new BadRequestException("no ratings yet");	
 		}
 		return rating;
+	}
+
+	@Override
+	public User validateUser(User user) {
+		
+		User localUser = userDao.findByUsername(user.getUsername());
+		String OriginalPassword = null;
+		if (localUser == null) {
+        	throw new BadRequestException("Employee with this email doesn't exist");
+        }else
+        {
+		
+		String key = localUser.getSalt();
+		
+		String password = localUser.getPassword();
+		
+		byte[] bytekey = DecryptPassword.hexStringToByteArray(key);
+        SecretKeySpec sks = new SecretKeySpec(bytekey, DecryptPassword.AES);
+        Cipher cipher;
+		try {
+			cipher = Cipher.getInstance(DecryptPassword.AES);
+			cipher.init(Cipher.DECRYPT_MODE, sks);
+	        byte[] decrypted = cipher.doFinal(DecryptPassword.hexStringToByteArray(password));
+	        OriginalPassword = new String(decrypted);
+	        System.out.println(OriginalPassword);
+			
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        }
+        
+      if(OriginalPassword.equals(user.getPassword()))
+      {  
+    	  user.setUserId(localUser.getUserId());
+    	  user.setFirstName(localUser.getFirstName());
+    	  user.setPassword("");
+    	  return user;
+      }
+      else
+    	  return null;
+		
+	}
+
+	@Override
+	public List<com.userfront.model.Movie> filterByGenre2(String id) {
+		// TODO Auto-generated method stub
+		return movieDao.filterByGenre2(id);
+	}
+
+	@Override
+	public UserMovieRating rateTheMovie(UserMovieRating userMovieRating) {
+		
+		return movieDao.rateTheMovie(userMovieRating);
 	}
 
 	

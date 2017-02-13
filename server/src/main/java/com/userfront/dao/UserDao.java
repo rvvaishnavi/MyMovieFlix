@@ -10,4 +10,6 @@ public interface UserDao
 	User findByUsername(String username);
 	
     User createUser(User user);
+
+	
 }

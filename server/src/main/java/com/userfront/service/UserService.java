@@ -6,6 +6,8 @@ import com.userfront.domain.Movie;
 import com.userfront.domain.User;
 import com.userfront.domain.UserMovie;
 import com.userfront.model.Genre;
+import com.userfront.model.RatingsAndComments;
+import com.userfront.model.UserMovieRating;
 
 public interface UserService {
 
@@ -23,7 +25,7 @@ public interface UserService {
 
 	List<Genre> filterByGenre(String id);
 
-	List<UserMovie> getMovieRatingsAndComments(Long id);
+	List<RatingsAndComments> getMovieRatingsAndComments(Long id);
 
 	List<Movie> filterByType(String id);
 
@@ -36,6 +38,12 @@ public interface UserService {
 	List<Movie> sortMoviesBy();
 
 	Double getMovieAverageRating(Long id);
+
+	User validateUser(User user);
+
+	List<com.userfront.model.Movie> filterByGenre2(String id);
+
+	UserMovieRating rateTheMovie(UserMovieRating userMovieRating);
 	
 	
 

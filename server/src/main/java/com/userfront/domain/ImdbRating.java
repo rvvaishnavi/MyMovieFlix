@@ -16,7 +16,8 @@ public class ImdbRating implements Serializable{
 	
 	private Double imdbRating;
 	
-	
+	@OneToOne
+	private Movie movie;
 
 	public String getImdbId() {
 		return imdbId;

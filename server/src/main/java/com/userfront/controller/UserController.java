@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.userfront.domain.Movie;
 import com.userfront.domain.UserMovie;
 import com.userfront.model.Genre;
+import com.userfront.model.RatingsAndComments;
+import com.userfront.model.UserMovieRating;
 import com.userfront.service.UserService;
 
 @RestController
 @RequestMapping("/user")
+@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER') " )
 public class UserController {
 	
 
@@ -32,7 +36,7 @@ public class UserController {
 	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/getMovieRatings/{id}")
-	public List<UserMovie> getMovieRatingsAndComments(@PathVariable("id") Long id) {
+	public List<RatingsAndComments> getMovieRatingsAndComments(@PathVariable("id") Long id) {
 		
 		return userService.getMovieRatingsAndComments(id);
 	}
@@ -48,6 +52,14 @@ public class UserController {
 		
 		return userService.rateMovie(userMovie);
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/rateTheMovie")
+	public UserMovieRating rateTheMovie(@RequestBody UserMovieRating userMovieRating) {
+		
+		return userService.rateTheMovie(userMovieRating);
+	}
+	
+	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/getTopRatedMoviesAndSeries")
 	public List<Movie> getTopRatedMoviesAndSeries () {
@@ -71,6 +83,13 @@ public class UserController {
 		
 		return userService.filterByGenre(id);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/filterByGenre2/{id}")
+	public List<com.userfront.model.Movie> filterByGenre2 (@PathVariable("id") String id) {
+		
+		return userService.filterByGenre2(id);
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/filterByType/{id}")
 	public List<Movie> filterByType (@PathVariable("id") String id) {

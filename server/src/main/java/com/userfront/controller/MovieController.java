@@ -21,6 +21,7 @@ public class MovieController {
 
 	@RequestMapping(value="/movieList",method = RequestMethod.GET)
     public List<com.userfront.model.Movie> getAllMoviesAndSeries(){
+		System.out.println("movie url");
 	     return  movieService.getAllMoviesAndSeries();
        
     }
