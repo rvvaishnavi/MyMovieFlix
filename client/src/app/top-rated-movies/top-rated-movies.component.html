@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="container_wrap">
+    <div class="header_top">
+      <div class="col-sm-3 logo"><a [routerLink]="['/movies']"><img src="assets/images/logo.jpg" alt=""/></a></div>
+      <div class="col-sm-6 nav">
+        <ul>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated movies"><a [routerLink]="['/topRatedMovies']"> </a> </span></li>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated series"><a [routerLink]="['/topRatedSeries']"> </a></span></li>
+
+        </ul>
+      </div>
+      <div class="col-sm-3 header_right">
+        <ul class="header_right_box">
+          <ul class="header_right_box">
+            <li>Welcome {{currentUser?.firstName}}</li>
+            <li><p><a href="login.html">Logout</a></p></li>
+
+            <div class="clearfix"> </div>
+          </ul>
+        </ul>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+    <div class="slider">
+      <div class="callbacks_container">
+        <ul class="rslides" id="slider">
+          <li><img src="assets/images/banner.jpg" class="img-responsive" alt=""/>
+            <div class="button">
+              <a href="#" class="hvr-shutter-out-horizontal">Watch Now</a>
+            </div>
+          </li>
+          <li><img src="assets/images/banner1.jpg" class="img-responsive" alt=""/>
+            <div class="button">
+              <a href="#" class="hvr-shutter-out-horizontal">Watch Now</a>
+            </div>
+          </li>
+          <li><img src="assets/images/banner2.jpg" class="img-responsive" alt=""/>
+            <div class="button">
+              <a href="#" class="hvr-shutter-out-horizontal">Watch Now</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="banner_desc">
+        <div class="col-md-9">
+          <ul class="list_1">
+            <li>Published <span class="m_1">Feb 20, 2015</span></li>
+            <li>Updated <span class="m_1">Feb 20 2015</span></li>
+            <li>Rating <span class="m_1"><img src="assets/images/rating.png" alt=""/></span></li>
+          </ul>
+        </div>
+        <div class="col-md-3 grid_1">
+
+        </div>
+      </div>
+    </div>
+    <div class="content">
+
+
+
+
+
+
+
+      <div class="box_1">
+        <h1 class="m_2">{{caption}} </h1>
+
+
+        <div class="clearfix"> </div>
+
+        <table class="table">
+
+          <tbody>
+          <tr>
+            <td *ngFor="let movie of moviesList ; let i=index"><img [src]="movie.poster">
+              <div class="caption1">
+
+                <p class="m_3">{{movie.title}}, ImdbRating {{movie.imdbRating.imdbRating}}</p>
+
+              </div>
+
+
+
+            </td>
+
+          </tr>
+
+
+          </tbody>
+        </table>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <footer id="footer">
+      <div id="footer-3d">
+        <div class="gp-container">
+          <span class="first-widget-bend"></span>
+        </div>
+      </div>
+      <div id="footer-widgets" class="gp-footer-larger-first-col">
+        <div class="gp-container">
+          <div class="footer-widget footer-1">
+            <div class="wpb_wrapper">
+              <img src="assets/images/logo.jpg" alt=""/>
+            </div>
+            <br>
+
+          </div>
+          <div class="footer_box">
+            <div class="col_1_of_3 span_1_of_3">
+
+            </div>
+            <div class="col_1_of_3 span_1_of_3">
+
+            </div>
+            <div class="col_1_of_3 span_1_of_3">
+
+              <div class="copy">
+                <p></p>
+              </div>
+            </div>
+            <div class="clearfix"> </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
