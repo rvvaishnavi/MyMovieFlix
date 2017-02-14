@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="container_wrap">
+    <div class="header_top">
+      <div class="col-sm-3 logo"><img src="assets/images/logo.jpg" alt=""/></div>
+      <div class="col-sm-6 nav">
+        <ul>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="movie"> </span></li>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="tv series"></span></li>
+
+        </ul>
+      </div>
+      <div class="col-sm-3 header_right">
+        <ul class="header_right_box">
+
+          <div class="clearfix"> </div>
+        </ul>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+    <div class="content">
+      <div class="register">
+        <div class="col-md-6 login-left">
+          <h3>New Customers</h3>
+          <p>If you do not have an account then please register !!</p>
+          <a class="acount-btn" [routerLink]="['/register']">Create an Account</a>
+        </div>
+        <div class="col-md-6 login-right">
+          <h3>Registered Customers</h3>
+          <p>If you have an account with us, please log in.</p>
+          <form  (ngSubmit)="onSubmit()"  novalidate #userForm="ngForm">
+            <div>
+              <span>Email Address<label>*</label></span>
+              <input type="text"  name="username" [(ngModel)]="model.username" #username="ngModel"  required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+              <div *ngIf="username.errors && username.dirty" class="errors">
+                <p [hidden]="!username.errors.required">Username is required</p>
+                <p [hidden]="!username.errors.pattern">Email is invalid </p>
+
+              </div>
+            </div>
+            <div>
+              <span>Password<label>*</label></span>
+              <input type="text"  name="password" [(ngModel)]="model.password" #password="ngModel"  required>
+              <div *ngIf="password.errors && password.dirty" class="errors">
+                <p [hidden]="!password.errors.required">password is required</p>
+
+              </div>
+            </div>
+            <a class="forgot" href="#">Forgot Your Password?</a>
+            <button type="submit" class="btn btn-primary" [disabled]="userForm.form.invalid">Login</button>
+            <div *ngIf="loginFail" class="errors">
+              {{"Invalid Credentials"}}
+            </div>
+          </form>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <footer id="footer">
+    <div id="footer-3d">
+      <div class="gp-container">
+        <span class="first-widget-bend"> </span>
+      </div>
+    </div>
+    <div id="footer-widgets" class="gp-footer-larger-first-col">
+      <div class="gp-container">
+        <div class="footer-widget footer-1">
+          <div class="wpb_wrapper">
+            <img src="assets/images/logo.jpg" alt=""/>
+          </div>
+          <br>
+
+        </div>
+        <div class="footer_box">
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+            <div class="copy">
+              <p></p>
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </footer>
+</div>

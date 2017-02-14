@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="container_wrap">
+    <div class="header_top">
+      <div class="col-sm-3 logo"><a [routerLink]="['/movies']"><img src="assets/images/logo.jpg" alt=""/></a></div>
+      <div class="col-sm-6 nav">
+        <ul>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated movies"><a [routerLink]="['/topRatedMovies']"> </a></span></li>
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated series"><a [routerLink]="['/topRatedSeries']"> </a></span></li>
+        </ul>
+      </div>
+      <div class="col-sm-3 header_right">
+        <ul class="header_right_box">
+          <ul class="header_right_box">
+            <li>Welcome {{currentUser.firstName}}</li>
+            <li><p><a href="login.html">Logout</a></p></li>
+
+            <div class="clearfix"> </div>
+          </ul>
+        </ul>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+    <div class="content">
+      <div class="movie_top">
+        <div class="col-md-9 movie_box">
+
+
+
+
+
+
+          <form (ngSubmit)="addMovie()">
+            <div class="desc1 span_3_of_2" >
+              <p class="movie_option"><strong>Title: </strong><input type="text" class="form-control" [(ngModel)]="model.title" name="title" #title="ngModel"/></p>
+              <p class="movie_option"><strong>Type: </strong><input type="text" class="form-control" [(ngModel)]="model.type" name="type" #type="ngModel" /></p>
+              <p class="movie_option"><strong>Year: </strong><input type="text" class="form-control" [(ngModel)]="model.year" name="year" #year="ngModel" /></p>
+              <p class="movie_option"><strong>Rated: </strong><input type="text"  class="form-control" [(ngModel)]="model.rated" name="rated" #rated="ngModel" /></p>
+              <p class="movie_option"><strong>Release date: </strong><input type="text" class="form-control" [(ngModel)]="model.released" name="released" #released="ngModel" /></p>
+              <p class="movie_option"><strong>Run Time: </strong><input type="text" class="form-control" [(ngModel)]="model.runtime" name="runtime" #runtime="ngModel" /></p>
+              <p class="movie_option"><strong>Genre: </strong> <select multiple class="form-control" [(ngModel)]="model.genre" name="movieId" name="genre" #genre="ngModel" >
+                <option  [value]="1">action  </option>
+                <option  [value]="2">  comedy </option>
+                <option  [value]="3">  fiction </option>
+                <option  [value]="4">  crime </option>
+                <option  [value]="5">  drama </option>
+                <option  [value]="6">  thriller </option>
+              </select></p>
+              <p class="movie_option"><strong>Director: </strong><input type="text" class="form-control" [(ngModel)]="model.director" name="director" #director="ngModel" /> </p>
+              <p class="movie_option"><strong>Writer: </strong><input type="text" class="form-control" [(ngModel)]="model.writers" name="writers" #writers="ngModel" /> </p>
+              <p class="movie_option"><strong>Language: </strong><input type="text" class="form-control" [(ngModel)]="model.languages" name="languages" #languages="ngModel" /> </p>
+              <p class="movie_option"><strong>Country: </strong><input type="text" class="form-control" [(ngModel)]="model.countries" name="countries" #countries="ngModel" />
+              <p class="movie_option"><strong>Awards: </strong><input type="text" class="form-control" [(ngModel)]="model.awards" name="awards" #awards="ngModel" /> </p>
+              <p class="movie_option"><strong>Actors: </strong><input type="text" class="form-control" [(ngModel)]="model.actors" name="actors" #actors="ngModel" />
+              <p class="movie_option"><strong>Meta Score: </strong><input type="text" class="form-control" [(ngModel)]="model.metaScore" name="metaScore" #metaScore="ngModel" />
+              <p class="movie_option"><strong>ImdbRating: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbRatingDouble" name="imdbRatingDouble" #imdbRatingDouble="ngModel" />
+              <p class="movie_option"><strong>ImdbVotes: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbVotes" name="imdbVotes" #imdbVotes="ngModel" />
+              <p class="movie_option"><strong>imdbId: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbId" name="imdbId" #imdbId="ngModel" />
+              <p class="movie_option"><strong>poster: </strong><input type="text" class="form-control" [(ngModel)]="model.poster" name="poster" #poster="ngModel" />
+              <p class="movie_option"><strong>Plot: </strong><textarea class="form-control" [(ngModel)]="model.plot" name="plot"></textarea></p>
+
+
+              <button type="submit" class="btn btn-primary">Add Movie</button>
+               <div *ngIf="flag">Movie Created Successfully</div>
+
+
+            </div>
+
+
+
+
+
+
+          </form>
+
+
+
+
+
+
+        </div>
+        <div class="col-md-3">
+          <div class="movie_img"><div class="grid_2">
+            <img src="assets/images/pic6.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+          </div>
+          <div class="grid_2 col_1">
+            <img src="assets/images/pic2.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+          <div class="grid_2 col_1">
+            <img src="assets/images/pic9.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <footer id="footer">
+    <div id="footer-3d">
+      <div class="gp-container">
+        <span class="first-widget-bend"> </span>
+      </div>
+    </div>
+    <div id="footer-widgets" class="gp-footer-larger-first-col">
+      <div class="gp-container">
+        <div class="footer-widget footer-1">
+          <div class="wpb_wrapper">
+            <img src="assets/images/logo.jpg" alt=""/>
+          </div>
+          <br>
+
+        </div>
+        <div class="footer_box">
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+            <div class="copy">
+              <p></p>
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </footer>
+</div>
+

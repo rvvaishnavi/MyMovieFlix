@@ -1,0 +1,258 @@
+<div class="container">
+  <div class="container_wrap">
+    <div class="header_top">
+      <div class="col-sm-3 logo"><a [routerLink]="['/movies']"><img src="assets/images/logo.jpg" alt=""/></a></div>
+      <div class="col-sm-6 nav">
+        <ul>
+
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated movies"><a [routerLink]="['/topRatedMovies']"> </a></span></li>
+          <li><span class="simptip-position-bottom simptip-movable" data-tooltip="top rated series"><a [routerLink]="['/topRatedSeries']"> </a></span></li>
+        </ul>
+      </div>
+      <div class="col-sm-3 header_right">
+        <ul class="header_right_box">
+          <ul class="header_right_box">
+            <li>Welcome {{currentUser?.firstName}}</li>
+            <li><p><a href="login.html">Logout</a></p></li>
+
+            <div class="clearfix"> </div>
+          </ul>
+        </ul>
+      </div>
+      <div class="clearfix"> </div>
+    </div>
+    <div class="content">
+      <div class="movie_top">
+        <div class="col-md-9 movie_box">
+          <div class="grid images_3_of_2">
+            <div class="movie_image" >
+              <span class="movie_rating">5.0</span>
+              <a href='http://www.imdb.com/title/{{mymovie.imdbId}}/'>  <img [src]="mymovie.poster" *ngIf="mymovie.poster" class="img-responsive" alt="" /> </a>
+            </div>
+            <p></p>
+            <div class="movie_rate">
+
+              <form (ngSubmit)="getRatingComment()" class="sky-form">
+                <fieldset>
+                  <section>
+                    <button type="submit" >View Ratings and Comments</button>
+                  </section>
+                </fieldset>
+              </form>
+              <div class="clearfix"> </div>
+            </div>
+          </div>
+
+
+          <div class="desc1 span_3_of_2" *ngIf="!editCheck">
+            <p class="movie_option"><strong>Title: </strong>{{mymovie.title}}</p>
+            <p class="movie_option"><strong>Type: </strong>{{mymovie.type}}</p>
+            <p class="movie_option"><strong>Year: </strong>{{mymovie.year}}</p>
+            <p class="movie_option"><strong>Rated: </strong>{{mymovie.rated}}</p>
+            <p class="movie_option"><strong>Release date: </strong>{{mymovie.released}}</p>
+            <p class="movie_option"><strong>Run Time: </strong>{{mymovie.runtime}}</p>
+            <p class="movie_option"><strong>Genre: </strong>{{mymovie.genreString}}</p>
+            <p class="movie_option"><strong>Director: </strong><a href="#">{{mymovie.director}} </a></p>
+            <p class="movie_option"><strong>Writer: </strong><a href="#">{{mymovie.writers}} </a></p>
+            <p class="movie_option"><strong>Language: </strong><a href="#">{{mymovie.languages}} </a></p>
+            <p class="movie_option"><strong>Country: </strong><a href="#">{{mymovie.countries}}</a>
+            <p class="movie_option"><strong>Awards: </strong><a href="#">{{mymovie.awards}} </a></p>
+            <p class="movie_option"><strong>Actors: </strong><a href="#">{{mymovie.actors}}</a>
+            <p class="movie_option"><strong>Meta Score: </strong><a href="#">{{mymovie.metaScore}}</a>
+            <p class="movie_option"><strong>ImdbRating: </strong><a href="#">{{mymovie.imdbRatingDouble}}</a>
+            <p class="movie_option"><strong>ImdbVotes: </strong><a href="#">{{mymovie.imdbVotes}}</a>
+
+
+
+          </div>
+
+          <strong *ngIf="!editCheck" >Plot: </strong>
+          <p class="m_4" *ngIf="!editCheck" > {{mymovie.plot}}</p>
+
+
+
+          <form *ngIf="editCheck" (ngSubmit)="editMovie()">
+          <div class="desc1 span_3_of_2" >
+            <p class="movie_option"><strong>Title: </strong><input type="text" class="form-control" [(ngModel)]="model.title" name="title" /></p>
+            <p class="movie_option"><strong>Type: </strong><input type="text" class="form-control" [(ngModel)]="model.type" name="type" #type="ngModel" /></p>
+            <p class="movie_option"><strong>Year: </strong><input type="text" class="form-control" [(ngModel)]="model.year" name="year" #year="ngModel" /></p>
+            <p class="movie_option"><strong>Rated: </strong><input type="text"  class="form-control" [(ngModel)]="model.rated" name="rated" #rated="ngModel" /></p>
+            <p class="movie_option"><strong>Release date: </strong><input type="text" class="form-control" [(ngModel)]="model.released" name="released" #released="ngModel" /></p>
+            <p class="movie_option"><strong>Run Time: </strong><input type="text" class="form-control" [(ngModel)]="model.runtime" name="runtime" #runtime="ngModel" /></p>
+            <p class="movie_option"><strong>Genre: </strong> <select multiple class="form-control" [(ngModel)]="model.genre" name="movieId" name="genre" #genre="ngModel" >
+              <option  [value]="1">action  </option>
+              <option  [value]="2">  comedy </option>
+              <option  [value]="3">  fiction </option>
+              <option  [value]="4">  crime </option>
+              <option  [value]="5">  drama </option>
+              <option  [value]="6">  thriller </option>
+                                                           </select></p>
+            <p class="movie_option"><strong>Director: </strong><input type="text" class="form-control" [(ngModel)]="model.director" name="director" #director="ngModel" /> </p>
+            <p class="movie_option"><strong>Writer: </strong><input type="text" class="form-control" [(ngModel)]="model.writers" name="writers" #writers="ngModel" /> </p>
+            <p class="movie_option"><strong>Language: </strong><input type="text" class="form-control" [(ngModel)]="model.languages" name="languages" #languages="ngModel" /> </p>
+            <p class="movie_option"><strong>Country: </strong><input type="text" class="form-control" [(ngModel)]="model.countries" name="countries" #countries="ngModel" />
+            <p class="movie_option"><strong>Awards: </strong><input type="text" class="form-control" [(ngModel)]="model.awards" name="awards" #awards="ngModel" /> </p>
+            <p class="movie_option"><strong>Actors: </strong><input type="text" class="form-control" [(ngModel)]="model.actors" name="actors" #actors="ngModel" />
+            <p class="movie_option"><strong>Meta Score: </strong><input type="text" class="form-control" [(ngModel)]="model.metaScore" name="metaScore" #metaScore="ngModel" />
+           <p class="movie_option"><strong>ImdbRating: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbRatingDouble" name="imdbRatingDouble" #imdbRatingDouble="ngModel" />
+            <p class="movie_option"><strong>ImdbVotes: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbVotes" name="imdbVotes" #imdbVotes="ngModel" />
+            <p class="movie_option"><strong>imdbId: </strong><input type="text" class="form-control" [(ngModel)]="model.imdbId" name="imdbId" #imdbId="ngModel" />
+            <p class="movie_option"><strong>poster: </strong><input type="text" class="form-control" [(ngModel)]="model.poster" name="poster" #poster="ngModel" />
+
+
+
+
+
+
+
+
+          </div>
+
+          <strong >Plot: </strong>
+
+          <div class="text">
+            <textarea  [(ngModel)]="model.plot" name="plot"></textarea>
+          </div>
+            <button type="submit" class="btn btn-primary">Edit Movie</button>
+             {{msg}}
+          </form>
+
+
+          <form class="sky-form" (ngSubmit)="submitRatingComment()" novalidate #userForm="ngForm" *ngIf="!adminCheck">
+
+            <div class="text">
+              <textarea placeholder="Message:" [(ngModel)]="model.comment" name="comment" #comment="ngModel"  required >Comment:</textarea>
+              <div *ngIf="comment.errors && comment.dirty" class="errors">
+                <p [hidden]="!comment.errors.required">Comment is required</p>
+
+
+              </div>
+              <input type="text" [(ngModel)]="model.movieId" name="movieId" [hidden]="true" value="{{mymovie.movieId}}"/>
+              <input type="text" [(ngModel)]="model.userId" name="userId" [hidden]="true" value="{{currentUser?.firstName}}"/>
+            </div>
+
+            <div>
+              <strong> Rate the movie: </strong>
+              <input type="radio" name="rating" #rating="ngModel"  required [(ngModel)]="model.rating" [value]="1">{{1}}
+
+              <input type="radio" name="rating" #rating="ngModel"  required  [(ngModel)]="model.rating" [value]="2">{{2}}
+              <input type="radio" name="rating" #rating="ngModel"  required [(ngModel)]="model.rating" [value]="3">{{3}}
+              <input type="radio" name="rating" #rating="ngModel"  required [(ngModel)]="model.rating" [value]="4">{{4}}
+              <input type="radio" name="rating" #rating="ngModel"  required [(ngModel)]="model.rating" [value]="5">{{5}}
+              <div *ngIf="rating.errors && rating.dirty" class="errors">
+                <p [hidden]="!rating.errors.required">rating is required</p>
+
+
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-submit1">
+              <button type="submit" class="btn btn-primary" id="submit" [disabled]="userForm.form.invalid"> Submit your Comment and Rating </button>
+
+            </div>
+            <div [hidden]="!flag">
+            <strong> Rated successfully!! </strong>
+            </div>
+            <div class="clearfix"></div>
+
+
+
+
+          </form>
+          <div class="single" *ngIf="check">
+
+
+
+            <table  class="table">
+              <thead>
+              <tr>
+                <th>Picture</th>
+                <th>Username</th>
+                <th>Comment</th>
+                <th>Rating</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let movie of ratingsList">
+                <td><img src="assets/images/user.jpeg" style="width: 40px;height: 40px;border-radius: 50%;" ></td>
+                <td>{{movie.username}} </td>
+                <td>{{movie.comment}}</td>
+                <td>{{movie.rating}}</td>
+
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Average Rating</td>
+                <td>{{avgRating}}</td>
+              </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="movie_img"><div class="grid_2">
+            <img src="assets/images/pic6.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+          </div>
+          <div class="grid_2 col_1">
+            <img src="assets/images/pic2.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+          <div class="grid_2 col_1">
+            <img src="assets/images/pic9.jpg" class="img-responsive" alt="">
+            <div class="caption1">
+
+              <p class="m_3">Guardians of the Galaxy</p>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <footer id="footer">
+    <div id="footer-3d">
+      <div class="gp-container">
+        <span class="first-widget-bend"> </span>
+      </div>
+    </div>
+    <div id="footer-widgets" class="gp-footer-larger-first-col">
+      <div class="gp-container">
+        <div class="footer-widget footer-1">
+          <div class="wpb_wrapper">
+            <img src="assets/images/logo.jpg" alt=""/>
+          </div>
+          <br>
+
+        </div>
+        <div class="footer_box">
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+          </div>
+          <div class="col_1_of_3 span_1_of_3">
+
+            <div class="copy">
+              <p></p>
+            </div>
+          </div>
+          <div class="clearfix"> </div>
+        </div>
+        <div class="clearfix"> </div>
+      </div>
+    </div>
+  </footer>
+</div>
